@@ -2,13 +2,14 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UnauthorizedExceptio
 import { AuthService } from './auth.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 
-@Controller('auth')
+@Controller('api')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
   create(@Body() req: LoginAuthDto) {
     let data = this.authService.login(req);
-    return  data == null ? data : new UnauthorizedException("Unauthorized").getResponse();
+    if(data == null) return new UnauthorizedException("Unauthorized").getResponse()
+    return data;
   }
 }

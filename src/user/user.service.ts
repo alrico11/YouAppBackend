@@ -2,9 +2,9 @@ import {Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './user.schema';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -24,18 +24,7 @@ export class UserService {
       username: createUserDto.username,
       password: hashedPassword
     };
-  
     const data = this.user.create(user);
     return data;
   }
-
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
 }
