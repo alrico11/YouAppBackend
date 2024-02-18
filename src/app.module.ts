@@ -3,18 +3,22 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { ProfileModule } from './profile/profile.module';
-import { RabbitmqService } from './rabbitmq/rabbitmq.service';
-import { MessageController } from './message/message.controller';
+import { RabbitMQService } from './rabbitmq/rabbitmq.service';
+import { MessageModule } from './message/message.module';
 import * as dotenv from 'dotenv';
-dotenv.config()
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.DATABASE_URL),
     UserModule,
     AuthModule,
     ProfileModule,
+    MessageModule,
+    ConfigModule.forRoot({
+      isGlobal:true,
+      envFilePath:'./env'
+    })
   ],
-  providers: [RabbitmqService],
-  controllers: [MessageController],
+  providers: [RabbitMQService],
 })
 export class AppModule {}
