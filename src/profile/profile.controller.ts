@@ -15,22 +15,22 @@ export class ProfileController {
   async create(@Req() req,@Body() createProfileDto: CreateProfileDto) {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = AuthService.decodeJwtToken(token);
-    const data = await this.profileService.create(decodedToken, createProfileDto)
+    const data = await this.profileService.create(decodedToken.sub, createProfileDto)
     if( data == null) return new BadRequestException("Cant create profiles").getResponse();
-    return data;
+    return { success: true };
   }
   @Get('getProfile')
   async get(@Req() req){
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = AuthService.decodeJwtToken(token);
-    const data = await this.profileService.get(decodedToken) 
-    return data;
+    const data = await this.profileService.get(decodedToken.sub) 
+    return { success: true, data };
   }
   @Put('updateProfile')
   async update(@Req() req,@Body() dto: UpdateProfileDto){
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = AuthService.decodeJwtToken(token);
-    const data = await this.profileService.update(decodedToken,dto)
-    return data;
+    const data = await this.profileService.update(decodedToken.sub,dto)
+    return { success: true };
   }
 }

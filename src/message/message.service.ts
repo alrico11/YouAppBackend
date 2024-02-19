@@ -14,10 +14,10 @@ export class MessageService {
     private readonly rabbitMQService: RabbitMQService
     ) {}
 
-    async sendMessage(senderId: string, dto: CreateMessageDto) {
+    async sendMessage(username: string, dto: CreateMessageDto) {
       try {
         let data = {
-          from : senderId,
+          from : username,
           to : dto.to,
           content : dto.content 
         };
@@ -31,11 +31,14 @@ export class MessageService {
         await this.rabbitMQService.closeConnection();
       }
     }
-    async viewMessageByUserId(userId: string): Promise<Message[]> {
+    async viewMessageByUserId(username: string): Promise<Message[]> {
       try {
-        const messages = await this.message.find({ to: userId }).exec();
-        console.log(userId)
-        console.log(messages)
+        const messages = await this.message.find(
+          { $or : [
+            {from: username},
+            {to: username}
+          ] }
+          ).exec();
         await this.rabbitMQService.connect();
         await this.rabbitMQService.sendViewedMessages(messages);
         await this.rabbitMQService.closeConnection();

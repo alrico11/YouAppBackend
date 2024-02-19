@@ -17,6 +17,8 @@ export class Profile extends Document {
     height: number;
     @Prop()
     weight: number;
+    @Prop()
+    pict: string;
     @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
     userId: string;
 }

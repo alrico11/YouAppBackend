@@ -1,4 +1,4 @@
-import { IsString, IsNumber } from 'class-validator';
+import { IsString, IsNumber, IsBase64 } from 'class-validator';
 
 export class CreateProfileDto {
     @IsString()
@@ -15,4 +15,6 @@ export class CreateProfileDto {
 
     @IsNumber()
     weight : number;
+    @IsBase64()
+    pict : string
 }

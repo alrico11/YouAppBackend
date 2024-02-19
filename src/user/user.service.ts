@@ -12,7 +12,13 @@ export class UserService {
   @InjectModel('User') private readonly user: Model<User>) { }
 
   async create(createUserDto: CreateUserDto) {
-    const userExist = await this.user.findOne({email : createUserDto.email});
+    const userExist = await this.user.findOne({
+        $or:
+          [
+            {email : createUserDto.email},
+            {username : createUserDto.username}
+          ]
+      });
     if (userExist !== null) return null;
   
     if (createUserDto.password !== createUserDto['confirm-password']) {

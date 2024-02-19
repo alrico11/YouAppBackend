@@ -11,23 +11,28 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 export class ProfileService {
   constructor(@InjectModel('Profile') private readonly profile: Model<Profile>) { }
 
-  async create(userId: string, createProfileDto: CreateProfileDto) {
-    let data = await this.profile.findOne({ userId: userId })
-    if (data != null) {
-      throw new ForbiddenException("Cant create profiles");
+  async create(userId: string, req: CreateProfileDto) {
+    try {
+      let data = await this.profile.findOne({ userId: userId })
+      if (data != null) {
+        throw new ForbiddenException("Cant create profiles");
+      }
+      const profile = new this.profile();
+      profile['display-name'] = req['display-name'];
+      profile.gender = req.gender === 'male';
+      profile.birthdate = Utils.convertStringToDate(req.birthdate);
+      const zodiacAndHoroscope = Utils.setZodiacAndHoroscope(req.birthdate);
+      profile.horoscope = zodiacAndHoroscope.horoscope;
+      profile.zodiac = zodiacAndHoroscope.zodiac;
+      profile.height = req.height;
+      profile.weight = req.weight;
+      profile.userId = userId;
+      profile.pict = req.pict;
+      profile.save();
+      return profile;
+    } catch (error) {
+      throw error
     }
-    const profile = new this.profile();
-    profile['display-name'] = createProfileDto['display-name'];
-    profile.gender = createProfileDto.gender === 'male';
-    profile.birthdate = Utils.convertStringToDate(createProfileDto.birthdate);
-    const zodiacAndHoroscope = Utils.setZodiacAndHoroscope(createProfileDto.birthdate);
-    profile.horoscope = zodiacAndHoroscope.horoscope;
-    profile.zodiac = zodiacAndHoroscope.zodiac;
-    profile.height = createProfileDto.height;
-    profile.weight = createProfileDto.weight;
-    profile.userId = userId;
-    profile.save();
-    return profile;
   }
   async get(userId: string): Promise<GetProfileDto> {
     let data = await this.profile.findOne({ userId: userId })
@@ -41,23 +46,29 @@ export class ProfileService {
     profile.zodiac = data.zodiac;
     profile.height = data.height;
     profile.weight = data.weight;
+    profile.pict = data.pict;
     return profile;
   }
   async update(userId: string, req: UpdateProfileDto) {
-    let profile = await this.profile.findOneAndUpdate({ userId: userId })
-    if (profile == null) throw new NotFoundException("Not Found")
-    profile.userId = userId;
-    profile['display-name'] = req['display-name']
-    profile.birthdate = Utils.convertStringToDate(req.birthdate);
-    profile.gender = req.gender == "male" ? true : false;
-    const zodiacAndHoroscope = Utils.setZodiacAndHoroscope(req.birthdate);
-    profile.horoscope = zodiacAndHoroscope.horoscope;
-    profile.zodiac = zodiacAndHoroscope.zodiac;
-    profile.horoscope = zodiacAndHoroscope.horoscope;
-    profile.zodiac = zodiacAndHoroscope.zodiac;
-    profile.height = req.height;
-    profile.weight = req.weight;
-    profile.save();
-    return profile;
+    try {
+      let profile = await this.profile.findOneAndUpdate({ userId: userId })
+      if (profile == null) throw new NotFoundException("Not Found")
+      profile.userId = userId;
+      profile['display-name'] = req['display-name']
+      profile.birthdate = Utils.convertStringToDate(req.birthdate);
+      profile.gender = req.gender == "male" ? true : false;
+      const zodiacAndHoroscope = Utils.setZodiacAndHoroscope(req.birthdate);
+      profile.horoscope = zodiacAndHoroscope.horoscope;
+      profile.zodiac = zodiacAndHoroscope.zodiac;
+      profile.horoscope = zodiacAndHoroscope.horoscope;
+      profile.zodiac = zodiacAndHoroscope.zodiac;
+      profile.height = req.height;
+      profile.weight = req.weight;
+      profile.pict = req.pict;
+      profile.save();
+      return profile;
+    } catch (error) {
+      throw error
+    }
   }
 }

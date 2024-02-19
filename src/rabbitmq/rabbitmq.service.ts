@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import * as amqp from 'amqplib';
 import { Message } from 'src/message/entities/message.entity';
-
+import * as dotenv from 'dotenv';
+dotenv.config()
 @Injectable()
 export class RabbitMQService {
   private connection: amqp.Connection;
@@ -9,14 +10,18 @@ export class RabbitMQService {
 
   async connect(): Promise<void> {
     try {
-      this.connection = await amqp.connect('amqp://localhost:5672');
-      this.channel = await this.connection.createConfirmChannel();
-      const exchangeName = 'messages_exchange';
-      await this.channel.assertExchange(exchangeName, 'direct', { durable: true });
+        this.connection = await amqp.connect(`amqp://${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`, {
+            username: process.env.RABBITMQ_USER,
+            password: process.env.RABBITMQ_PASS
+        });
+        this.channel = await this.connection.createConfirmChannel();
+        const exchangeName = 'messages_exchange';
+        await this.channel.assertExchange(exchangeName, 'direct', { durable: true });
     } catch (error) {
-      throw new Error(`Failed to connect to RabbitMQ: ${error}`);
+        throw new Error(`Failed to connect to RabbitMQ: ${error}`);
     }
-  }
+}
+
 
   async sendMessage(message: any): Promise<void> {
     try {

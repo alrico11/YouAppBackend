@@ -14,9 +14,9 @@ export class MessageController {
   async sendMessage(@Body() dto : CreateMessageDto, @Req() req: Request){
     try {
       const token = req.headers.authorization.split(' ')[1];
-      const senderId = AuthService.decodeJwtToken(token);
-      await this.messageService.sendMessage(senderId, dto);
-      return dto;
+      const decoded = AuthService.decodeJwtToken(token);
+      await this.messageService.sendMessage(decoded.username, dto);
+      return { success: true };
     } catch (error) {
       throw new Error(`error : ${error}`);
     }
@@ -25,9 +25,9 @@ export class MessageController {
   async viewMessages( @Req() req: Request) {
     try {
       const token = req.headers.authorization.split(' ')[1];
-      const senderId = AuthService.decodeJwtToken(token);
-      const messages = await this.messageService.viewMessageByUserId(senderId);
-      return { success: true, messages };
+      const decoded = AuthService.decodeJwtToken(token);
+      const data = await this.messageService.viewMessageByUserId(decoded.username);
+      return { success: true, data };
     } catch (error) {
       throw new Error(`Error viewing messages: ${error}`);
     }

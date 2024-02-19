@@ -6,5 +6,6 @@ export class GetProfileDto {
     weight? : number;
     horoscope : string;
     zodiac : string;
+    pict? : string;
     userId : string;
 }

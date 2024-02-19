@@ -10,6 +10,6 @@ export class AuthController {
   create(@Body() req: LoginAuthDto) {
     let data = this.authService.login(req);
     if(data == null) return new UnauthorizedException("Unauthorized").getResponse()
-    return data;
+    return { success: true , data};
   }
 }

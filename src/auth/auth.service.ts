@@ -17,12 +17,15 @@ export class AuthService {
   async login(login: LoginAuthDto) {
     try {
       const userExist = await this.user.findOne({
-        email: login.email
-      })
+        $or: [
+          { email: login.email },
+          { username: login.email }
+        ]
+      });
       if (userExist == null) return null;
       const userValid = bcrypt.compare(login.password, userExist.password)
       if (!userValid) return null;
-      const payload = { username: userExist.username, sub: userExist._id };
+      const payload = { username: userExist.username, sub: userExist._id, };
       const accessToken = this.jwtService.sign(payload);
       return {
         accessToken: accessToken,
@@ -31,10 +34,13 @@ export class AuthService {
       console.log(error)
     }
   }
-  static decodeJwtToken(token: string): any {
+  static decodeJwtToken(token: string): { username: string, sub: string } {
     try {
-      const decoded = jwt.verify(token, process.env.JWT_KEY);
-      const data = decoded.sub
+      const decoded: any = jwt.verify(token, process.env.JWT_KEY);
+      const data = {
+        username: decoded.username,
+        sub: decoded.sub
+      };
       return data;
     } catch (error) {
       throw new Error('Invalid JWT token');
