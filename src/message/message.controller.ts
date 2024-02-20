@@ -8,13 +8,16 @@ import { CreateMessageDto } from './dto/create-message.dto';
 
 @Controller('api')
 export class MessageController {
-  constructor(private readonly messageService: MessageService) {}
+  constructor(
+    private readonly messageService: MessageService,
+    private readonly authservice: AuthService
+    ) {}
 
   @Post('sendMessage')
   async sendMessage(@Body() dto : CreateMessageDto, @Req() req: Request){
     try {
       const token = req.headers.authorization.split(' ')[1];
-      const decoded = AuthService.decodeJwtToken(token);
+      const decoded = await this.authservice.decodeJwtToken(token);
       await this.messageService.sendMessage(decoded.username, dto);
       return { success: true };
     } catch (error) {
@@ -25,7 +28,7 @@ export class MessageController {
   async viewMessages( @Req() req: Request) {
     try {
       const token = req.headers.authorization.split(' ')[1];
-      const decoded = AuthService.decodeJwtToken(token);
+      const decoded = await this.authservice.decodeJwtToken(token);
       const data = await this.messageService.viewMessageByUserId(decoded.username);
       return { success: true, data };
     } catch (error) {

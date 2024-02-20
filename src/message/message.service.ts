@@ -1,7 +1,7 @@
 // message.service.ts
 
 import { Injectable } from '@nestjs/common';
-import { RabbitMQService } from 'src/rabbitmq/rabbitmq.service';
+import { RabbitMQService } from '../rabbitmq/rabbitmq.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -38,7 +38,7 @@ export class MessageService {
             {from: username},
             {to: username}
           ] }
-          ).exec();
+          );
         await this.rabbitMQService.connect();
         await this.rabbitMQService.sendViewedMessages(messages);
         await this.rabbitMQService.closeConnection();

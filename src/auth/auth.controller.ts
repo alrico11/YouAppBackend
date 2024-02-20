@@ -7,9 +7,9 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  create(@Body() req: LoginAuthDto) {
-    let data = this.authService.login(req);
+  async create(@Body() req: LoginAuthDto) {
+    let data = await this.authService.login(req);
     if(data == null) return new UnauthorizedException("Unauthorized").getResponse()
-    return { success: true , data};
+    return { status : true, data};
   }
 }
