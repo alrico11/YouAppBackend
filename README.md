@@ -26,6 +26,12 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Installation NEST, MONGODB, & RABBITMQ VIA DOCKER 
+```bash
+#docker
+$ docker compose up
+```
+
 ## Installation
 
 ```bash

@@ -1,5 +1,22 @@
 version: '3'
 services:
+  app:
+    container_name: backend
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: mongodb://mongodb:27017/youapp
+    ports:
+      - '3000:3000'
+    depends_on:
+      - database
+  database:
+    image: mongo:6.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - '27017:27017'
   rabbitmq:
     image: rabbitmq:3.12-management
     ports:

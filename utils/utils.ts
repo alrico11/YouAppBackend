@@ -82,11 +82,16 @@ export class Utils {
 
         return { zodiac, horoscope };
     }
-    static convertDateToDdMmYyyy(date: Date): string {
+    static convertDateToDdMmYyyy(date: Date | string): string {
+        if (!(date instanceof Date)) {
+            date = new Date(date);
+        }
+        if (isNaN(date.getTime())) {
+            throw new Error('Invalid Date');
+        }
         const day = String(date.getDate()).padStart(2, '0');
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Month index starts from 0
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
     }
-
 }

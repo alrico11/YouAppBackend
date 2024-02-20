@@ -5,7 +5,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import * as jwt from 'jsonwebtoken';
 import * as dotenv from 'dotenv'
 dotenv.config();
 @Injectable()
@@ -31,12 +30,12 @@ export class AuthService {
         accessToken: accessToken,
       };
     } catch (error) {
-      console.log(error)
+      throw error
     }
   }
-  static decodeJwtToken(token: string): { username: string, sub: string } {
+  async decodeJwtToken(token: string): Promise<{ username: string, sub: string }> {
     try {
-      const decoded: any = jwt.verify(token, process.env.JWT_KEY);
+      const decoded: any = this.jwtService.verify(token, { secret: process.env.JWT_KEY });
       const data = {
         username: decoded.username,
         sub: decoded.sub
