@@ -1,12 +1,14 @@
 // message.controller.ts
 
-import { Controller, Post, Body, Req, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Req, Get, Param, UseGuards } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { Request } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import { CreateMessageDto } from './dto/create-message.dto';
+import { JwtGuard } from 'src/auth/jwt.guard';
 
 @Controller('api')
+@UseGuards(JwtGuard) 
 export class MessageController {
   constructor(
     private readonly messageService: MessageService,

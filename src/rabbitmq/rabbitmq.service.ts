@@ -10,10 +10,7 @@ export class RabbitMQService {
 
   async connect(): Promise<void> {
     try {
-        this.connection = await amqp.connect(`amqp://${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`, {
-            username: process.env.RABBITMQ_USER,
-            password: process.env.RABBITMQ_PASS
-        });
+        this.connection = await amqp.connect(`${process.env.RABBITMQ_HOST}`);
         this.channel = await this.connection.createConfirmChannel();
         const exchangeName = 'messages_exchange';
         await this.channel.assertExchange(exchangeName, 'direct', { durable: true });
