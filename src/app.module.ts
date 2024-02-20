@@ -8,8 +8,6 @@ import { MessageModule } from './message/message.module';
 import * as dotenv from 'dotenv';
 import { ConfigModule } from '@nestjs/config';
 
-console.log(process.env.DATABASE_URL)
-console.log("HALOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOo")
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.DATABASE_URL),
