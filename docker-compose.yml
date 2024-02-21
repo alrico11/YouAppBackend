@@ -18,10 +18,15 @@ services:
     ports:
       - '27017:27017'
   rabbitmq:
-    image: rabbitmq:3-management-alpine
+    image: rabbitmq:management
+    restart: always
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_VHOST: /
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - 5672:5672
+      - 15672:15672
     volumes:
-      - ./rabbitmq-data:/var/lib/rabbitmq
       - ./.env:/usr/src/app/.env
