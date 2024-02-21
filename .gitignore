@@ -3,6 +3,7 @@
 /node_modules
 /build
 /rabbitmq-data
+/mongodb-data
 # Logs
 logs
 *.log
