@@ -18,6 +18,7 @@ describe('ProfileService', () => {
     "height": 180,
     "weight": 75,
     "userId": "65d361e13a925ea71f1c214b",
+    "interest": ["football","culinary"],
     "pict": "/9j/4AAQSkZJRgABAQAAZABkAAD/2wCEABQQEBkSGScXFycyJh8mMi4mJiYmLj41NTU1NT5EQUFBQUFBREREREREREREREREREREREREREREREREREREREQBFRkZIBwgJhgYJjYm"
   }
 beforeEach(async () => {
@@ -74,6 +75,7 @@ it('should return updated user data', async () => {
     "birthdate": "29/03/2001",
     "height": 188,
     "weight": 90,
+    "interest": ["football","culinary"],
     "pict": "/9j/4AAQSkZJRgABAQAAZABkAAD/2wCEABQQEBkSGScXFycyJh8mMi4mJiYmLj41NTU1NT5EQUFBQUFBREREREREREREREREREREREREREREREREREREREQBFRkZIBwgJhgYJjYm"
   }
   const userId = "65d361e13a925ea71f1c214b"
@@ -99,6 +101,7 @@ it('should return user data', async () => {
     "birthdate": "01/02/2001",
     "height": 180,
     "weight": 75,
+    "interest": ["football","culinary"],
     "pict": "/9j/4AAQSkZJRgABAQAAZABkAAD/2wCEABQQEBkSGScXFycyJh8mMi4mJiYmLj41NTU1NT5EQUFBQUFBREREREREREREREREREREREREREREREREREREREQBFRkZIBwgJhgYJjYm"
   }
   service['profile'].findOne = jest.fn().mockResolvedValue(null);
@@ -121,6 +124,7 @@ it('should return user data', async () => {
         height: mock.height,
         weight: mock.weight,
         pict: mock.pict,
+        interest: mock.interest
       }));
     });
 
@@ -140,6 +144,7 @@ it('should return user data', async () => {
         "birthdate": "01/02/2001",
         "height": 170,
         "weight": 70,
+        "interest": ["football","culinary"],
         "pict": "/updated/picture/url"
       }
       const userId = "65d361e13a925ea71f1c214b"
@@ -154,6 +159,7 @@ it('should return user data', async () => {
         height: dto.height,
         weight: dto.weight,
         pict: dto.pict,
+        interest: mock.interest
       }));
     });
 
@@ -164,7 +170,8 @@ it('should return user data', async () => {
         "birthdate": "01/02/2001",
         "height": 170,
         "weight": 70,
-        "pict": "/updated/picture/url"
+        "pict": "/updated/picture/url",
+        "interest": ["football","culinary"],
       }
       const userId = "nonexistentuserid"
       await expect(service.update(userId, dto)).rejects.toThrowError(NotFoundException);

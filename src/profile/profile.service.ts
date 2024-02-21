@@ -27,6 +27,7 @@ export class ProfileService {
         weight:req.weight,
         userId:userId,
         pict:req.pict,
+        interest: req.interest
       });
       return newProfile;
     } catch (error) {
@@ -49,6 +50,7 @@ export class ProfileService {
     profile.height = data.height;
     profile.weight = data.weight;
     profile.pict = data.pict;
+    profile.interest = data.interest;
     return profile;
   }
   
@@ -63,6 +65,7 @@ export class ProfileService {
         height: req.height,
         weight: req.weight,
         pict: req.pict,
+        interest : req.interest
       };
   
       let profile = await this.profile.findOneAndUpdate({ userId: userId }, { $set: update }, { new: true });

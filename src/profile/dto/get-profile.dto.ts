@@ -7,5 +7,6 @@ export class GetProfileDto {
     horoscope : string;
     zodiac : string;
     pict? : string;
+    interest? : string[];
     userId : string;
 }
