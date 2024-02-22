@@ -40,7 +40,7 @@ export class MessageService {
           ] }
           );
         await this.rabbitMQService.connect();
-        await this.rabbitMQService.consumeMessages('nama_queue', (message: amqp.Message) => {
+        await this.rabbitMQService.consumeMessages('chat-queue', (message: amqp.Message) => {
           console.log("Received messages: ", message.content.toString());
         });
         await this.rabbitMQService.sendViewedMessages(messages);
