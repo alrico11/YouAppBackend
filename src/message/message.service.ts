@@ -6,7 +6,7 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Message } from './entities/message.entity';
-
+import * as amqp from 'amqplib';
 @Injectable()
 export class MessageService {
   constructor(
@@ -40,6 +40,9 @@ export class MessageService {
           ] }
           );
         await this.rabbitMQService.connect();
+        await this.rabbitMQService.consumeMessages('nama_queue', (message: amqp.Message) => {
+          console.log("Received messages: ", message.content.toString());
+        });
         await this.rabbitMQService.sendViewedMessages(messages);
         await this.rabbitMQService.closeConnection();
         return messages;

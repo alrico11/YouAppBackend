@@ -21,6 +21,7 @@ describe('MessageService', () => {
     closeConnection: jest.fn(),
     sendMessage: jest.fn(),
     sendViewedMessages: jest.fn(),
+    consumeMessages: jest.fn()
   };
 
   beforeEach(async () => {
@@ -72,6 +73,7 @@ describe('MessageService', () => {
       $or: [{ from: username }, { to: username }],
     });
     expect(mockRabbitMQService.connect).toHaveBeenCalled();
+    expect(mockRabbitMQService.consumeMessages).toHaveBeenCalled();
     expect(mockRabbitMQService.sendViewedMessages).toHaveBeenCalledWith(messages);
     expect(mockRabbitMQService.closeConnection).toHaveBeenCalled();
   });
